@@ -33,3 +33,17 @@
     - docker-ce-cli
     - containerd.io
     state: present
+  notify: docker running
+- name: configure docker daemon to use systemd cgroup driver
+  ansible.builtin.copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
+      }
+  notify: reconfigure docker

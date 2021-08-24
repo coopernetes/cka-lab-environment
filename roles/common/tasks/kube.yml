@@ -1,0 +1,28 @@
+- name: download kube repo key
+  ansible.builtin.get_url:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+- name: Add kube repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present
+    filename: kubernetes
+- name: install kubelet, kubeadm and kubectl
+  ansible.builtin.apt:
+    pkg:
+    - kubelet={{ kubernetes_version }}-00
+    - kubeadm={{ kubernetes_version }}-00
+    - kubectl={{ kubernetes_version }}-00
+    state: present
+- name: Hold kubelet
+  dpkg_selections:
+    name: kubelet
+    selection: hold
+- name: Hold kubeadm
+  dpkg_selections:
+    name: kubeadm
+    selection: hold
+- name: Hold kubectl
+  dpkg_selections:
+    name: kubectl
+    selection: hold

@@ -1,3 +1,13 @@
 ---
 - name: reload sysctl
   ansible.builtin.shell: sysctl --system
+- name: docker running
+  ansible.builtin.systemd:
+    state: started
+    enabled: yes
+    name: docker
+- name: reconfigure docker
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload : yes
+    name: docker

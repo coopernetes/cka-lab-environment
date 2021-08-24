@@ -1,0 +1,35 @@
+---
+- name: install prereq packages
+  ansible.builtin.apt:
+    pkg:
+    - apt-transport-https
+    - ca-certificates
+    - curl 
+    - gnupg 
+    - lsb-release
+    state: present
+- name: download docker gpg key
+  ansible.builtin.uri:
+    url: https://download.docker.com/linux/debian/gpg
+    return_content: yes
+  register: docker_gpg
+- name: import docker gpg
+  ansible.builtin.shell:
+    cmd: gpg --dearmor --yes -o /usr/share/keyrings/docker-archive-keyring.gpg
+    stdin: "{{ docker_gpg.content }}"
+    stdin_add_newline: no
+- name: get debian release name
+  ansible.builtin.shell: lsb_release -cs
+  register: debian_release
+- name: Add docker repository into sources list
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian {{ debian_release.stdout }} stable"
+    state: present
+    filename: docker
+- name: install docker runtime
+  ansible.builtin.apt:
+    pkg:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    state: present

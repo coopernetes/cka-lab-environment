@@ -1,3 +1,4 @@
+---
 - name: setup etc/hosts
   ansible.builtin.lineinfile:
     path: /etc/hosts
@@ -18,3 +19,4 @@
       net.bridge.bridge-nf-call-iptables = 1
   notify: 
   - reload sysctl
+- import_tasks: docker.yml

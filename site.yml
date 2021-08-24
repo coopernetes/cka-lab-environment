@@ -1,0 +1,14 @@
+---
+- name: apply common config to all hosts
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+
+- name: apply common config to all hosts
+  hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - common

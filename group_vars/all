@@ -1,0 +1,8 @@
+---
+static_hosts:
+  debian01.lab: 192.168.56.11
+  debian02.lab: 192.168.56.12
+  debian03.lab: 192.168.56.13
+  debian04.lab: 192.168.56.14
+  debian05.lab: 192.168.56.15
+  debian06.lab: 192.168.56.16

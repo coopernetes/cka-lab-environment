@@ -1,0 +1,30 @@
+---
+- name: install keepalived
+  ansible.builtin.apt:
+    name: keepalived
+    state: present
+
+- name: keepalived config file
+  ansible.builtin.template:
+    src: ../templates/keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  vars:
+    state: "{{ (keepalived.master == inventory_hostname) | ternary('MASTER', 'BACKUP') }}"
+    priority: "{{ (keepalived.master == inventory_hostname) | ternary('101', '100') }}"
+    virtual_ipaddress: "{{ keepalived.virtual_ipaddress }}"
+    virtual_router_id: 51
+    auth_pass: abc123
+
+- name: check_apiserver keepalive script
+  ansible.builtin.template:
+    src: ../templates/check_apiserver.sh.j2
+    dest: /etc/keepalived/check_apiserver.sh
+    mode: 0755
+  vars:
+    virtual_ipaddress: "{{ keepalived.virtual_ipaddress }}"
+
+- name: restart keepalived
+  ansible.builtin.systemd:
+    state: restarted
+    enabled: yes
+    name: keepalived

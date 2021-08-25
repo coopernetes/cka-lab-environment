@@ -1,10 +1,4 @@
 ---
-- name: setup etc/hosts
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    line: "{{ item.value }} {{ item.key }}"
-  loop: "{{ static_hosts | dict2items }}"
-
 - name: enable br_netfilter module
   ansible.builtin.copy:
     dest: /etc/modules-load.d/k8s.conf
@@ -22,6 +16,8 @@
 
 - name: disable swap
   ansible.builtin.shell: swapoff -a
+  register: swapoff
+  changed_when: swapoff.stdout != ""
 
 - name: remove swap from fstab
   ansible.builtin.lineinfile:

@@ -7,3 +7,6 @@ static_hosts:
   debian04.lab: 192.168.56.14
   debian05.lab: 192.168.56.15
   debian06.lab: 192.168.56.16
+  alpine01.lab: 192.168.56.101
+  alpine02.lab: 192.168.56.102
+  alpine03.lab: 192.168.56.103

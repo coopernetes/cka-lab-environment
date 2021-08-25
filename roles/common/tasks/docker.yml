@@ -20,10 +20,13 @@
     cmd: gpg --dearmor --yes -o /usr/share/keyrings/docker-archive-keyring.gpg
     stdin: "{{ docker_gpg.content }}"
     stdin_add_newline: no
+  register: gpg
+  changed_when: gpg.stdout != ""
 
 - name: get debian release name
   ansible.builtin.shell: lsb_release -cs
   register: debian_release
+  changed_when: no
 
 - name: Add docker repository into sources list
   ansible.builtin.apt_repository:

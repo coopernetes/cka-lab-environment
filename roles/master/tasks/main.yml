@@ -1,0 +1,54 @@
+---
+- name: install keepalived
+  ansible.builtin.apt:
+    name: keepalived
+    state: present
+
+- name: install haproxy
+  ansible.builtin.apt:
+    name: haproxy
+    state: present
+
+- name: keepalived config file
+  ansible.builtin.template:
+    src: ../templates/keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  vars:
+    state: "{{ (loadbalancing.keepalived.master == inventory_hostname) | ternary('MASTER', 'BACKUP') }}"
+    priority: "{{ (loadbalancing.keepalived.master == inventory_hostname) | ternary('101', '100') }}"
+    virtual_ipaddress: "{{ loadbalancing.keepalived.virtual_ipaddress }}"
+    virtual_router_id: 51
+    auth_pass: abc123
+  notify: restart keepalived
+
+- name: check_apiserver keepalive script
+  ansible.builtin.template:
+    src: ../templates/check_apiserver.sh.j2
+    dest: /etc/keepalived/check_apiserver.sh
+    mode: 0755
+  vars:
+    virtual_ipaddress: "{{ loadbalancing.keepalived.virtual_ipaddress }}"
+    dest_port: "{{ loadbalancing.dest_port }}"
+
+- name: haproxy config file
+  ansible.builtin.template:
+    src: ../templates/haproxy.conf.j2
+    dest: /etc/haproxy/haproxy.cfg
+  vars:
+    apiservers: "{{ loadbalancing.haproxy.backends }}"
+    src_port: "{{ loadbalancing.src_port }}"
+    dest_port: "{{ loadbalancing.dest_port }}"
+  notify: restart haproxy
+
+
+- name: start keepalived
+  ansible.builtin.systemd:
+    state: started
+    enabled: yes
+    name: keepalived
+
+- name: started haproxy
+  ansible.builtin.systemd:
+    state: started
+    enabled: yes
+    name: haproxy

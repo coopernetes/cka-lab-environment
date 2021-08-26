@@ -7,9 +7,18 @@ static_hosts:
   debian04.lab: 192.168.56.14
   debian05.lab: 192.168.56.15
   debian06.lab: 192.168.56.16
+  kubeapi.lab: 192.168.56.21
 #  alpine01.lab: 192.168.56.101
 #  alpine02.lab: 192.168.56.102
 #  alpine03.lab: 192.168.56.103
-keepalived:
-  master: debian01.lab
-  virtual_ipaddress: 192.168.56.21
+loadbalancing:
+  keepalived:
+    master: debian01.lab
+    virtual_ipaddress: 192.168.56.21
+  haproxy:
+    backends:
+      debian01: 192.168.56.11
+      debian02: 192.168.56.12
+      debian03: 192.168.56.13
+  src_port: 6443
+  dest_port: 8443

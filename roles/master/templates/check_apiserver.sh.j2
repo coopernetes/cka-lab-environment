@@ -1,0 +1,11 @@
+#!/bin/sh
+
+errorExit() {
+    echo "*** $*" 1>&2
+    exit 1
+}
+
+curl --silent --max-time 2 --insecure https://localhost:{{ dest_port }}/ -o /dev/null || errorExit "Error GET https://localhost:{{ dest_port }}/"
+if ip addr | grep -q {{ virtual_ipaddress }}; then
+    curl --silent --max-time 2 --insecure https://{{ virtual_ipaddress }}:{{ dest_port }}/ -o /dev/null || errorExit "Error GET https://{{ virtual_ipaddress }}:{{ dest_port }}/"
+fi

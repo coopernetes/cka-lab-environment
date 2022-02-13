@@ -13,3 +13,15 @@
     state: restarted
     daemon_reload : yes
     name: docker
+
+- name: kubelet running
+  ansible.builtin.systemd:
+    state: started
+    enabled: yes
+    name: kubelet
+
+- name: reconfigure kubelet
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload : yes
+    name: kubelet

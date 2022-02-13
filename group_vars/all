@@ -1,5 +1,5 @@
 ---
-kubernetes_version: 1.21.4
+kubernetes_version: 1.22.6
 static_hosts:
   debian01.lab: 192.168.56.11
   debian02.lab: 192.168.56.12

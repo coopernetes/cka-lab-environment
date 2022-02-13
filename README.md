@@ -28,3 +28,29 @@ Playbook follows the kubeadm installation instructions found here: https://kuber
 ```bash
 $ ansible-playbook -K site.yml
 ```
+
+## Upgrades
+The following tags can be used to upgrade specific components and remove dpkg hold. 
+
+**Note:** This playbook does not drain any nodes of active pods. 
+
+To upgrade a cluster:
+
+1. Change `kubernetes_version` in [group_vars/all](group_vars/all) or set it via extra-args.
+
+2. Run kubeadm & kubectl upgrades on a master node. Use `--limit <nodename>` to choose which one to perform the upgrade on.
+    ```shell
+    ansible-playbook site.yml --tags "upgrade,kubeadm,kubectl" --limit debian01.lab
+    ```
+
+3. Upgrade the kubectl on the master nodes. 
+    ```shell
+    ansible-playbook site.yml --tags "upgrade,kubelet" --limit "masters"
+    ```
+
+4. 
+
+5. Upgrade the worker nodes. 
+    ```shell
+    ansible-playbook site.yml --tags "upgrade,kubeadm,kubectl,kubelet" --limit "nodes"
+    ```

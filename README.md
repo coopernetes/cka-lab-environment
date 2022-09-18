@@ -4,9 +4,18 @@ This is a simple set of configurations, Ansible tasks & playbooks to deploy & ma
 Targeting the current [CKA exam version of Kubernetes, v1.24.4](https://github.com/cncf/curriculum).
 
 ## Topology
-So far, just six virtual machines running on Virtualbox. Connected via one NAT NIC (for Internet access to download dependencies) and one host-only internal NIC for communicating with my WSL Ansible control host.
+24GB (need to replace an 8GB stick) + Intel Xeon E1231v3 CPU on the host machine.
 
-These playbooks follow the [options for software load balancing](https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing) to also deploy keepalived and haproxy to load balance across the 3 master nodes.
+Six (6) virtual machines act as the cluster.
+* Three (3) Debian 11 VMs acting as cluster master, API server and etcd. 3GB/2CPU
+  - kubeadm, kubelet and kubectl
+  - keepalived + haproxy for high availability. See [options for software load balancing](https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing) for details. 
+* Three (3) Debian 11 VMs acting as worker nodes. 2GB/2CPU
+  - kubelet
+
+Each server has two NICs, one host-only private network (192.168.56.0/24) and the other bridged to the host for Internet access (192.168.1.0/24).
+
+An additional VM is used as an Ansible control host and development.
 
 ## Usage
 It's assumed that you have a valid Ansible inventory specified in `/etc/ansible/hosts` with two groups, one for the masters and another for worker nodes. There is also a provided [hosts](hosts) file that can be specified with the `-i` option.

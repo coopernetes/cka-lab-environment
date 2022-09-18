@@ -1,0 +1,17 @@
+[kubernetes]
+debian0[1:6].lab
+
+[masters]
+debian01.lab
+debian02.lab
+debian03.lab
+
+[nodes]
+debian04.lab
+debian05.lab
+debian06.lab
+
+#[misc]
+#alpine01.lab
+#alpine02.lab
+#alpine03.lab

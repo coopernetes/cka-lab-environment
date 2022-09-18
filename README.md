@@ -7,9 +7,12 @@ Targeting the current [CKA exam version of Kubernetes, v1.21.4](https://github.c
 So far, just six virtual machines running on Virtualbox. Connected via one NAT NIC (for Internet access to download dependencies) and one host-only internal NIC for communicating with my WSL Ansible control host.
 
 ## Usage
-It's assumed that you have a valid Ansible inventory specified in `/etc/ansible/hosts` with two groups, one for the masters and another for worker nodes.
+It's assumed that you have a valid Ansible inventory specified in `/etc/ansible/hosts` with two groups, one for the masters and another for worker nodes. There is also a provided [hosts](hosts) file that can be specified with the `-i` option.
 
 ```
+[kubernetes]
+debian0[1:6].lab
+
 [masters]
 debian01.lab
 debian02.lab
@@ -26,7 +29,7 @@ I'm also using the [common role](roles/common/tasks/main.yml) to configure the `
 Playbook follows the kubeadm installation instructions found here: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 ```bash
-$ ansible-playbook -K site.yml
+$ ansible-playbook -K -i hosts site.yml
 ```
 
 ## Upgrades
@@ -40,17 +43,25 @@ To upgrade a cluster:
 
 2. Run kubeadm & kubectl upgrades on a master node. Use `--limit <nodename>` to choose which one to perform the upgrade on.
     ```shell
-    ansible-playbook site.yml --tags "upgrade,kubeadm,kubectl" --limit debian01.lab
+    ansible-playbook -i hosts site.yml --tags "upgrade,kubeadm,kubectl" --limit debian01.lab
     ```
 
 3. Upgrade the kubectl on the master nodes. 
     ```shell
-    ansible-playbook site.yml --tags "upgrade,kubelet" --limit "masters"
+    ansible-playbook -i hosts site.yml --tags "upgrade,kubelet" --limit "masters"
     ```
 
-4. 
+4. I forget what to do at this step :(
 
 5. Upgrade the worker nodes. 
     ```shell
-    ansible-playbook site.yml --tags "upgrade,kubeadm,kubectl,kubelet" --limit "nodes"
+    ansible-playbook -i hosts site.yml --tags "upgrade,kubeadm,kubectl,kubelet" --limit "nodes"
     ```
+
+## Rest
+Use `kubeadm reset` via ansible ad-hoc to completely reset a cluster node.
+
+```shell
+ansible kubernetes --become -K -i hosts -a 'kubeadm reset -f --ignore-preflight-errors all'
+```
+

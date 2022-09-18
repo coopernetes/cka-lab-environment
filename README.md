@@ -62,12 +62,20 @@ To upgrade a cluster:
     ansible-playbook -i hosts site.yml --tags "upgrade,kubelet" --limit "masters"
     ```
 
-4. I forget what to do at this step :(
+4. Drain the worker nodes.
+   ```shell
+   ansible nodes -i hosts -K --become -a 'kubectl drain $(hostname)'
+   ```
 
 5. Upgrade the worker nodes. 
     ```shell
     ansible-playbook -i hosts site.yml --tags "upgrade,kubeadm,kubectl,kubelet" --limit "nodes"
     ```
+
+6. Uncordon the nodes.
+   ```shell
+   ansible nodes -i hosts -K --become -a 'kubectl uncordon $(hostname)'
+   ```
 
 ## Rest
 Use `kubeadm reset` via ansible ad-hoc to completely reset a cluster node.

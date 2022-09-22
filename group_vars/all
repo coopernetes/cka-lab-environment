@@ -1,24 +1,24 @@
 ---
 kubernetes_version: 1.24.4
 static_hosts:
-  debian01.lab: 192.168.56.11
-  debian02.lab: 192.168.56.12
-  debian03.lab: 192.168.56.13
-  debian04.lab: 192.168.56.14
-  debian05.lab: 192.168.56.15
-  debian06.lab: 192.168.56.16
+  ubuntu01.lab: 192.168.56.11
+  ubuntu02.lab: 192.168.56.12
+  ubuntu03.lab: 192.168.56.13
+  ubuntu04.lab: 192.168.56.14
+  ubuntu05.lab: 192.168.56.15
+  ubuntu06.lab: 192.168.56.16
   kubeapi.lab: 192.168.56.21
 #  alpine01.lab: 192.168.56.101
 #  alpine02.lab: 192.168.56.102
 #  alpine03.lab: 192.168.56.103
 loadbalancing:
   keepalived:
-    master: debian01.lab
+    master: ubuntu01.lab
     virtual_ipaddress: 192.168.56.21
   haproxy:
     backends:
-      debian01: 192.168.56.11
-      debian02: 192.168.56.12
-      debian03: 192.168.56.13
+      ubuntu01: 192.168.56.11
+      ubuntu02: 192.168.56.12
+      ubuntu03: 192.168.56.13
   src_port: 6443
   dest_port: 8443

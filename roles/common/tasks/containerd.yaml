@@ -1,0 +1,59 @@
+---
+- name: download containerd release
+  ansible.builtin.get_url:
+    url: "https://github.com/containerd/containerd/releases/download/v{{ containerd.version | default('1.6.8') }}/containerd-{{ containerd.version | default('1.6.8') }}-linux-amd64.tar.gz"
+    dest: /tmp/containerd.tar.gz
+  run_once: true
+
+- name: extract containerd.tar.gz
+  ansible.builtin.command: tar -C /usr/local -zxvf /tmp/containerd.tar.gz
+  run_once: true
+
+- name: download containerd.service
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+    dest: /usr/lib/systemd/system/containerd.service
+  run_once: true
+
+- name: enable service
+  ansible.builtin.systemd:
+    state: started
+    daemon_reload: true
+    name: containerd
+
+- name: download runc
+  ansible.builtin.get_url:
+    url: "https://github.com/opencontainers/runc/releases/download/v{{ runc.version | default('1.1.1') }}/runc.amd64"
+    dest: /usr/local/sbin/runc
+    owner: root
+    group: root
+    mode: 0755
+  run_once: true
+
+- name: setup cni dir
+  ansible.builtin.file:
+    path: /opt/cni/bin
+    state: directory
+  run_once: true
+
+- name: download cni plugins
+  ansible.builtin.get_url:
+    url: "https://github.com/containernetworking/plugins/releases/download/v{{ cni_plugins.version | default('1.1.1') }}/cni-plugins-linux-amd64-v{{ cni_plugins.version | default('1.1.1') }}.tgz"
+    dest: /tmp/cni.tar.gz
+  run_once: true
+
+- name: extract cni.tar.gz
+  ansible.builtin.command: tar -C /opt/cni/bin/ -zxvf /tmp/cni.tar.gz
+  notify: reconfigure containerd
+  run_once: true
+
+- name: download nerdctl
+  ansible.builtin.get_url:
+    url: "https://github.com/containerd/nerdctl/releases/download/v{{ nerdctl.version | default('0.19.0') }}/nerdctl-{{ nerdctl.version | default('0.19.0') }}-linux-amd64.tar.gz"
+    dest: /tmp/nerdctl.tar.gz
+  run_once: true
+
+- name: extract nerdctl.tar.gz
+  ansible.builtin.command: tar -C /usr/local/bin -zxvf /tmp/nerdctl.tar.gz
+  run_once: true
+

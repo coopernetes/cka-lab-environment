@@ -1,15 +1,15 @@
 [kubernetes]
-debian0[1:6].lab
+ubuntu0[1:6].lab
 
 [masters]
-debian01.lab
-debian02.lab
-debian03.lab
+ubuntu01.lab
+ubuntu02.lab
+ubuntu03.lab
 
 [nodes]
-debian04.lab
-debian05.lab
-debian06.lab
+ubuntu04.lab
+ubuntu05.lab
+ubuntu06.lab
 
 [localhost]
 localhost

@@ -4,6 +4,8 @@
     path: /etc/hosts
     line: "{{ item.value }} {{ item.key }}"
   loop: "{{ static_hosts | dict2items }}"
+  tags:
+    - local
 
 - name: enable br_netfilter module
   ansible.builtin.copy:
@@ -31,5 +33,5 @@
     regex: 'swap'
     state: absent
 
-- import_tasks: docker.yml
+- import_tasks: containerd.yaml
 - import_tasks: kube.yml

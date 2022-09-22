@@ -11,7 +11,9 @@ debian04.lab
 debian05.lab
 debian06.lab
 
-#[misc]
+[localhost]
+localhost
+
 #alpine01.lab
 #alpine02.lab
 #alpine03.lab

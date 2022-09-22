@@ -20,14 +20,15 @@
   - kubectl
   - kubelet
 
-- name: install kubeadm
+- name: install kubelet
   ansible.builtin.apt:
     pkg:
-    - kubeadm={{ kubernetes_version }}-00
+    - kubelet={{ kubernetes_version }}-00
     update_cache: yes
     state: present
+  notify: reconfigure kubelet
   tags:
-    - kubeadm
+    - kubelet
 
 - name: install kubectl
   ansible.builtin.apt:
@@ -38,15 +39,14 @@
   tags:
     - kubectl
 
-- name: install kubelet, kubeadm and kubectl
+- name: install kubeadm
   ansible.builtin.apt:
     pkg:
-    - kubelet={{ kubernetes_version }}-00
+    - kubeadm={{ kubernetes_version }}-00
     update_cache: yes
     state: present
-  notify: reconfigure kubelet
   tags:
-    - kubelet
+    - kubeadm
 
 - name: Hold packages
   dpkg_selections:

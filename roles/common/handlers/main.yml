@@ -8,6 +8,11 @@
     enabled: yes
     name: docker
 
+- name: restart containerd
+  ansible.builtin.systemd:
+    state: restarted
+    name: containerd
+
 - name: reconfigure containerd
   ansible.builtin.systemd:
     state: restarted

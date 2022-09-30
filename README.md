@@ -3,10 +3,8 @@ This is a simple set of configurations, Ansible tasks & playbooks to deploy & ma
 
 Targeting the current [CKA exam version of Kubernetes, v1.24.4](https://github.com/cncf/curriculum).
 
-**These playbooks do not currently work for 1.24.x due to changes in container runtime support + Debian/Ubuntu package versions**.
-
 ## Topology
-24GB (need to replace an 8GB stick) + Intel Xeon E1231v3 CPU on the host machine.
+32GB + Intel Xeon E1231v3 CPU on the host machine.
 
 Six (6) virtual machines act as the cluster.
 * Three (3) Debian 11 VMs acting as cluster master, API server and etcd. 3GB/2CPU

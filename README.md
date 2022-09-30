@@ -7,10 +7,10 @@ Targeting the current [CKA exam version of Kubernetes, v1.24.4](https://github.c
 32GB + Intel Xeon E1231v3 CPU on the host machine.
 
 Six (6) virtual machines act as the cluster.
-* Three (3) Debian 11 VMs acting as cluster master, API server and etcd. 3GB/2CPU
+* Three (3) Ubuntu 22.04 VMs acting as cluster master, API server and etcd. 3GB/2CPU
   - kubeadm, kubelet and kubectl
   - keepalived + haproxy for high availability. See [options for software load balancing](https://github.com/kubernetes/kubeadm/blob/main/docs/ha-considerations.md#options-for-software-load-balancing) for details. 
-* Three (3) Debian 11 VMs acting as worker nodes. 2GB/2CPU
+* Three (3) Ubuntu 22.04 VMs acting as worker nodes. 2GB/2CPU
   - kubelet
 
 Each server has two NICs, one host-only private network (192.168.56.0/24) and the other bridged to the host for Internet access (192.168.1.0/24).
@@ -22,25 +22,21 @@ It's assumed that you have a valid Ansible inventory specified in `/etc/ansible/
 
 ```
 [kubernetes]
-debian0[1:6].lab
+ubuntu0[1:6].lab
 
 [masters]
-debian01.lab
-debian02.lab
-debian03.lab
+ubuntu0[1:3].lab
 
 [nodes]
-debian04.lab
-debian05.lab
-debian06.lab
+ubuntu0[4:6].lab
 ```
 
-I'm also using the [common role](roles/common/tasks/main.yml) to configure the `/etc/hosts` file for internal name resolution. 
+I'm also using the [common role](roles/common/tasks/main.yaml) to configure the `/etc/hosts` file for internal name resolution. 
 
 Playbook follows the kubeadm installation instructions found here: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
 ```bash
-$ ansible-playbook -K -i hosts site.yml
+$ ansible-playbook -i inventory/hosts site.yaml
 ```
 
 ## Upgrades
@@ -54,12 +50,12 @@ To upgrade a cluster:
 
 2. Run kubeadm & kubectl upgrades on a master node. Use `--limit <nodename>` to choose which one to perform the upgrade on.
     ```shell
-    ansible-playbook -i hosts site.yml --tags "upgrade,kubeadm,kubectl" --limit debian01.lab
+    ansible-playbook -i hosts site.yaml --tags "upgrade,kubeadm,kubectl" --limit debian01.lab
     ```
 
 3. Upgrade the kubectl on the master nodes. 
     ```shell
-    ansible-playbook -i hosts site.yml --tags "upgrade,kubelet" --limit "masters"
+    ansible-playbook -i hosts site.yaml --tags "upgrade,kubelet" --limit "masters"
     ```
 
 4. Drain the worker nodes.
@@ -69,8 +65,8 @@ To upgrade a cluster:
 
 5. Upgrade the worker nodes. 
     ```shell
-    ansible-playbook -i hosts site.yml --tags "upgrade,kubeadm,kubectl,kubelet" --limit "nodes"
-    ```
+    ansible-playbook -i hosts site.yaml --tags "upgrade,kubeadm,kubectl,kubelet" --limit "nodes"
+    ``
 
 6. Uncordon the nodes.
    ```shell

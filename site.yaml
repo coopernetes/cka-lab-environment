@@ -1,14 +1,4 @@
 ---
-- name: apply common config to all kubernetes hosts
-  hosts: kubernetes
-  become: yes
-  become_method: sudo
-  roles:
-    - common
+- import_playbook: common.yaml
+- import_playbook: kube-masters.yaml
 
-- name: apply config to all kubernetes masters
-  hosts: masters
-  become: yes
-  become_method: sudo
-  roles:
-    - master

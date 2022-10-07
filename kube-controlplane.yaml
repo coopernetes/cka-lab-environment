@@ -1,0 +1,7 @@
+---
+- name: apply config to all kubernetes control plane nodes
+  hosts: controlplane
+  become: yes
+  become_method: sudo
+  roles:
+    - controlplane

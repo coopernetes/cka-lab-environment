@@ -1,7 +1,0 @@
----
-- name: apply config to all kubernetes masters
-  hosts: masters
-  become: yes
-  become_method: sudo
-  roles:
-    - master

@@ -1,6 +1,7 @@
 ---
 - name: apply common config to all kubernetes hosts
   hosts: kubernetes
+  gather_facts: no
   become: yes
   roles:
     - common

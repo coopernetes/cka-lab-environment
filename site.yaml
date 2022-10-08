@@ -1,4 +1,4 @@
 ---
 - import_playbook: common.yaml
-- import_playbook: kube-masters.yaml
+- import_playbook: kube-controlplane.yaml
 

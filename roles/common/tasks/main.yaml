@@ -1,12 +1,4 @@
 ---
-- name: setup etc/hosts
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    line: "{{ item.value }} {{ item.key }}"
-  loop: "{{ static_hosts | dict2items }}"
-  tags:
-    - local
-
 - name: enable br_netfilter module
   ansible.builtin.copy:
     dest: /etc/modules-load.d/k8s.conf
@@ -32,11 +24,12 @@
   register: swapoff
   changed_when: swapoff.stdout != ""
 
-- name: remove swap from fstab
-  ansible.builtin.lineinfile:
+- name: Disable swap permanently, persist reboots
+  replace:
     path: /etc/fstab
-    regex: 'swap'
-    state: absent
+    regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+    replace: '#\1\2\3swap\4'
+    backup: yes
 
-- import_tasks: containerd.yaml
+- import_tasks: "{{ container_runtime | default('containerd') }}.yaml"
 - import_tasks: kube.yaml

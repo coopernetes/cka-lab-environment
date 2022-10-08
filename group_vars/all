@@ -1,5 +1,10 @@
 ---
-kubernetes_version: 1.24.4
+container_runtime: containerd
+containerd_version: 1.6.8
+runc_version: 1.1.1
+cniplugins_version: 1.1.1
+nerdctl_version: 0.23.0
+kubernetes_version: 1.24.6
 static_hosts:
   ubuntu01.lab: 192.168.56.11
   ubuntu02.lab: 192.168.56.12
@@ -8,9 +13,6 @@ static_hosts:
   ubuntu05.lab: 192.168.56.15
   ubuntu06.lab: 192.168.56.16
   kubeapi.lab: 192.168.56.21
-#  alpine01.lab: 192.168.56.101
-#  alpine02.lab: 192.168.56.102
-#  alpine03.lab: 192.168.56.103
 loadbalancing:
   keepalived:
     master: ubuntu01.lab

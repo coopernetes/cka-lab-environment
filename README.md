@@ -68,7 +68,7 @@ To upgrade a cluster:
 5. Upgrade the nodes.
     ```shell
     ansible-playbook -i inventory/hosts site.yaml --tags "upgrade,kubeadm,kubectl,kubelet" --limit "nodes"
-    ``
+    ```
 
 6. Uncordon the nodes.
    ```shell

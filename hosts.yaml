@@ -1,10 +1,9 @@
 ---
-- name: apply common config to all kubernetes hosts
-  hosts: localhost
-  connection: local
+- name: setup /etc/hosts on all machines
+  hosts: all
   gather_facts: false
   tasks:
-    - name: setup etc/hosts
+    - name: setup /etc/hosts
       ansible.builtin.lineinfile:
         path: /etc/hosts
         line: "{{ item.value }} {{ item.key }}"

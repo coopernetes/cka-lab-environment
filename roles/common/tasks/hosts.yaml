@@ -1,7 +1,0 @@
----
-- name: setup etc/hosts
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    line: "{{ item.value }} {{ item.key }}"
-  loop: "{{ static_hosts | dict2items }}"
-

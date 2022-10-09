@@ -1,7 +1,7 @@
 ---
-- name: apply config to all kubernetes control plane nodes
+- name: apply load balancing to all kubernetes control plane nodes
   hosts: controlplane
   gather_facts: no
   become: yes
   roles:
-    - controlplane
+    - loadbalancer

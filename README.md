@@ -1,5 +1,5 @@
 # Kubernetes lab for CKA study
-This is a simple set of configurations, Ansible tasks & playbooks to deploy & manage some Debian virtual machines for the purposes of studying for the [CKA](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) exam.
+This is a simple set of configurations, Ansible tasks & playbooks to deploy & manage virtual machines for the purposes of studying for the [CKA](https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/) exam.
 
 Targeting the current [CKA exam version of Kubernetes, v1.24.4](https://github.com/cncf/curriculum).
 
